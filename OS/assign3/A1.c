@@ -62,10 +62,6 @@ int main(){
   		WT[i] = TAT[i] - BT[i];
   	}
   	
-  	/*printf("\nPrinting Turnaround time:\n");
-  	displaytime(TAT,max);
-  	printf("\nPrinting Waiting time:\n");
-  	displaytime(WT,max);*/
   	displaytime(AT,BT,CT,TAT,WT,max);
   	
   	
