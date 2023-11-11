@@ -3,17 +3,25 @@
 void Acceptime(int *arr,int size){
 	int num;
 	for(int i=0;i<size;i++){
+		
 		scanf("%d",&num);
 		arr[i]=num;
 		printf("\v");
 	}
 }
-void displaytime(int *arr,int size){
-	int num;
+void displaytime(int *AT,int *BT,int *CT,int *TAT,int *WT,int size){
+	int num ,totalTAT=0,totalWT=0;
+	float avgTAT=0,avgWT=0;
+	printf("Process\tAT\tBT\tCT\tTAT\tWT\n");
 	for(int i=0;i<size;i++){
-		printf("%d\t",arr[i]);
+		printf("P%d\t%d\t%d\t%d\t%d\t%d\n",i,AT[i],BT[i],CT[i],TAT[i],WT[i]);
+		totalTAT=totalTAT+TAT[i];
+		totalWT=totalWT+WT[i];
 	}
-	printf("\n");
+	avgTAT=(float)totalTAT/size;
+	avgWT=(float)totalWT/size;
+	printf("\naAverage Turnaround Time:%.2f",avgTAT);
+	printf("\naAverage Waiting Time:%.2f\n",avgWT);
 }
 
 void completiontime(int *AT,int *BT,int *CT,int size){
@@ -43,23 +51,22 @@ int main(){
 	
   	printf("\nAccepting arrival time:\n");
   	Acceptime(AT,max);
-  	displaytime(AT,max);
   	printf("\nAccepting Burst time:\n");
   	Acceptime(BT,max);
-  	displaytime(BT,max);
   	
   	printf("\nPrinting Completion time:\n");
   	completiontime(AT,BT,CT,max);
-  	displaytime(CT,max);
   	
   	for(int i=0;i<max;i++){
   		TAT[i] = CT[i] - AT[i];
   		WT[i] = TAT[i] - BT[i];
   	}
   	
-  	printf("\nPrinting Turnaround time:\n");
+  	/*printf("\nPrinting Turnaround time:\n");
   	displaytime(TAT,max);
   	printf("\nPrinting Waiting time:\n");
-  	displaytime(WT,max);
-  		
+  	displaytime(WT,max);*/
+  	displaytime(AT,BT,CT,TAT,WT,max);
+  	
+  	
 }
