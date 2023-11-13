@@ -49,7 +49,8 @@ int main(){
 	int i=0 ,j=0,count=0; 
 	while(cmd){
 		printf("\nmyshell$: ");
-		fgets(cmd, sizeof(cmd), stdin);
+		fgets(cmd, sizeof(cmd), stdin);//while getting string input
+		
 		if (cmd[strlen(cmd) - 1] == '\n') {  // Remove the newline character from the input.
             		cmd[strlen(cmd) - 1] = '\0';
         	}
