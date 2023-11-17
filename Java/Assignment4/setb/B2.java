@@ -15,7 +15,7 @@ class email{
 	}
 }
 
-class invalidUserException{
+class invalidUserException extends Exception{
 	invalidUserException(){
 		System.out.println("invalidUserException");
 	}
@@ -37,11 +37,14 @@ public class B2{
 		System.out.println("\nPassword::");
 		 passwd =sc.next();
 		
-		if(userName != newEmail.userName && passwd != newEmail.passwd){
-			throw new invalidUserException();
+		try{
+			if(userName == newEmail.userName && passwd == newEmail.passwd){
+				System.out.print("Password Matched pls enter");
+			}
 		}
-		else{
-			System.out.print("Password Matched pls enter");
+		catch(Exception e){
+			System.out.print("invalidUserException");
+			
 		}
 	
 	}
