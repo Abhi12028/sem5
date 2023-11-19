@@ -10,7 +10,7 @@
     {
         printf("p%d:",i+1);
         scanf("%d",&burst_time[i]);
-        p[i]=i+1;         
+        p[i]=i;         
     }
    // from here, burst times sorted
     for(i=0;i<n;i++)
