@@ -19,6 +19,8 @@ int main() {
       if (at[i] <= time && burst_time[i] > 0 && burst_time[i] < burst_time[smallest])
         smallest = i; //here we get small value of arrival time that is less than timer
     }
+    
+    
     printf("P[%d]\t|\t%d\t|\t%d\n", smallest + 1, time + burst_time[smallest], time - at[smallest]);
     sumt += time + burst_time[smallest] - at[smallest];
     sumw += time - at[smallest];

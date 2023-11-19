@@ -1,13 +1,15 @@
 #include<stdio.h>
 #include <stdlib.h>
 
+node *first =NULL,*last=NULL ,*rfirst =NULL,*rlast=NULL; //readyqueue first header ,  readylast temp node used to traverse
+int len=0 ,cputime=0 ;
+
 typedef struct node{
 	int at,bt,tat,wt,ct,status;
 	struct node* next;
 }node;
 
-node *first =NULL,*last=NULL;
-int len=0;
+
 void input(){
 	node *temp;
 	int at,bt;
@@ -24,6 +26,7 @@ void input(){
 		temp->bt=bt;
 		temp->wt=0;
 		temp->tat=0;
+		temp->status=0;
 		temp->next=NULL;
 		
 		if(first==NULL)
@@ -55,23 +58,47 @@ void displaytime(){
 	printf("\naAverage Waiting Time:%.2f\n",avgWT);
 }
 
-void swap(node *temp1 , node *temp2){
+
+int readyq(){
 	node *temp;
 	temp=(node*)malloc(sizeof(node));
-	temp=temp1;
-	temp1=temp2;
-	temp2=temp;
-	
-}
-
-void readyq(){
-	for(int i=0;i<len;i++){
-		for(int j=0;j<len;j++){
-			
+	temp=first;
+	int check=0;
+	while(temp !=NULL){
+		if(cputime==temp->at && temp->status==0){
+			if(rfirst==NULL)
+				rfirst=temp;
+			else
+				rlast->next=temp;
+			rlast=temp;
+			check=1;
 		}
 	}
+	return check;
 }
 
+void completion time(){
+	node *smallest =(node*)malloc(sizeof(node));
+	node *rtemp=(node*)malloc(sizeof(node));
+	
+	int check =0;
+	while(check){
+		
+		check=readyq();
+		rtemp=rfirst;
+		smallest =rtemp;
+		for(int i=0;i<len;i++){
+			if(rtemp->bt > rtemp->next->bt){
+				smallest =rtemp->next;
+				rtemp=rtemp->next;
+			}
+		}rtemp=NULL;
+		
+		
+	}
+	
+	
+}
 
 int main()
 {
