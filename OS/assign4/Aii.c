@@ -1,73 +1,106 @@
 #include <stdio.h>
-main()
+#include <stdlib.h>
+struct frame
 {
-        int q[20], p[50], c = 0, c1, d, f, i, j, k = 0, n, r, t, b[20], c2[20];
-        printf("Enter no of pages:");
-        scanf("%d", &n);
-        printf("Enter the reference string:");
-        for (i = 0; i < n; i++)
-                scanf("%d", &p[i]);
-        printf("Enter no of frames:");
-        scanf("%d", &f);
-        q[k] = p[k];
-        printf("\n\t%d\n", q[k]);
-        c++;
-        k++;
-        for (i = 1; i < n; i++)
-        {
-                c1 = 0;
-                for (j = 0; j < f; j++)
-                {
-                        if (p[i] != q[j])
-                                c1++;
-                }
-                if (c1 == f)
-                {
-                        c++;
-                        if (k < f)
-                        {
-                                q[k] = p[i];
-                                k++;
-                                for (j = 0; j < k; j++)
-                                        printf("\t%d", q[j]);
-                                printf("\n");
-                        }
-                        else
-                        {
-                                for (r = 0; r < f; r++)
-                                {
-                                        c2[r] = 0;
-                                        for (j = i - 1; j < n; j--)
-                                        {
-                                                if (q[r] != p[j])
-                                                        c2[r]++;
-                                                else
-                                                        break;
-                                        }
-                                }
-                                for (r = 0; r < f; r++)
-                                        b[r] = c2[r];
-                                for (r = 0; r < f; r++)
-                                {
-                                        for (j = r; j < f; j++)
-                                        {
-                                                if (b[r] < b[j])
-                                                {
-                                                        t = b[r];
-                                                        b[r] = b[j];
-                                                        b[j] = t;
-                                                }
-                                        }
-                                }
-                                for (r = 0; r < f; r++)
-                                {
-                                        if (c2[r] == b[0])
-                                                q[r] = p[i];
-                                        printf("\t%d", q[r]);
-                                }
-                                printf("\n");
-                        }
-                }
-        }
-        printf("\nThe no of page faults is %d", c);
+	int value, cnt;
+} fr[20];
+int frame[20], rs[20], cf = 0;
+int nf, lrs;
+void accept()
+{
+	int rs1 = 0;
+	printf("\nEnter total number of frames : ");
+	scanf("%d", &nf);
+	printf("\nEnter reference string :");
+	while (rs1 != -1)
+	{
+		scanf("%d", &rs1);
+		rs[lrs++] = rs1;
+	}
 }
+void display()
+{
+	int i;
+	printf("\nTotal Number of Frames : %d", nf);
+	printf("\nReferences String :");
+	for (i = 0; i < lrs; i++)
+		printf("%d\t", rs[i]);
+	printf("\nLenght of Reference String : %d\n", lrs);
+}
+search_page_lru(int rs)
+{
+	int i = 0;
+	for (i = 0; i < nf; i++)
+		if (rs == fr[i].value)
+			return i;
+	return -1;
+}
+int getLRU()
+{
+	int min = 999, i, val;
+	for (i = 0; i < nf; i++)
+	{
+		if (fr[i].cnt < min)
+		{
+			min = fr[i].cnt;
+			val = i;
+		}
+	}
+	return val;
+}
+lru()
+{
+	int i, k, j, time = 1, page_fault = 0, d;
+	for (i = 0, k = 0; i < lrs - 1; i++)
+	{
+		j = search_page_lru(rs[i]);
+		if (j == -1)
+		{
+			fr[k].value = rs[i];
+			fr[k].cnt = time;
+			page_fault++;
+			k++;
+			time++;
+			if (k == nf)
+				break;
+		}
+		else
+		{
+			fr[j].cnt = time;
+			time++;
+		}
+		for (d = 0; d < nf; d++)
+			printf("%d\t", fr[d].value);
+		printf("\n");
+	}
+	while (i < lrs - 1)
+	{
+		j = search_page_lru(rs[i]);
+		if (j == -1)
+		{
+			k = getLRU();
+			fr[k].value = rs[i];
+			fr[k].cnt = time;
+			page_fault++;
+			time++;
+			i++;
+		}
+		else
+		{
+			fr[j].cnt = time;
+			time++;
+			i++;
+		}
+		for (d = 0; d < nf; d++)
+			printf("%d\t", fr[d].value);
+		printf("\n");
+	}
+	printf("\nTotal no of page fault : %d\n", page_fault);
+}
+void main()
+{
+	accept();
+	display();
+	lru();
+}
+

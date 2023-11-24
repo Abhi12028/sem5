@@ -1,77 +1,122 @@
 #include <stdio.h>
-#include <conio.h>
-struct node
+#include <stdlib.h>
+struct frame
 {
-        int pno, freq;
-} frames[20];
-int n;
-int page_found(int pno)
+	int value, cnt, freq;
+} f[20];
+int frame[20], rs[20], cf = 0, at[10][10];
+int nf, lrs;
+void accept()
 {
-        int fno;
-        for (fno = 0; fno < n; fno++)
-                if (frames[fno].pno == pno)
-                        return fno;
-        return -1;
+	int rs1 = 0;
+	printf("\nEnter total number of frames : ");
+	scanf("%d", &nf);
+	printf("\nEnter reference string : ");
+	while (rs1 != -1)
+	{
+		scanf("%d", &rs1);
+		rs[lrs++] = rs1;
+	}
 }
-int get_free_frame()
+void display()
 {
-        int fno;
-        for (fno = 0; fno <= n; fno++)
-                if (frames[fno].pno == -1)
-                        return (fno);
-        return (-1);
+	int i;
+	printf("\nTotal Number of Frames : %d", nf);
+	printf("\nReferences String :");
+	for (i = 0; i < lrs - 1; i++)
+		printf("%d\t", rs[i]);
+	printf("\nLenght of Reference String : %d\n", lrs - 1);
 }
-int get_mfu_frame()
+search_page_lru(int rs)
 {
-        int fno;
-        int selfno = 0;
-        for (fno = 1; fno < n; fno++)
-                if (frames[fno].freq > frames[selfno].freq)
-                        selfno = fno;
-        return selfno;
+	int i = 0;
+	for (i = 0; i < nf; i++)
+		if (rs == f[i].value)
+			return i;
+	return -1;
+}
+int getLFU()
+{
+	int fno, i = 0;
+	int selfno = 0, tcnt = 0, mini = 100;
+	for (fno = 0; fno < nf; fno++)
+	{
+		if (f[fno].freq >= f[selfno].freq)
+		{
+			selfno = fno;
+			at[tcnt][0] = fno;
+			at[tcnt][1] = f[fno].cnt;
+			tcnt++;
+		}
+	}
+	/*for(i=0;i<tcnt;i++)
+	{
+		printf("\n%d   %d\n",at[1][0],at[i][1]);
+	}*/
+	for (i = 0; i < tcnt; i++)
+	{
+		//		printf("\narrival \n\n");
+		//		printf("%d   %d\n",at[1][0],at[i][1]);
+		if (at[i][1] < mini)
+		{
+			selfno = at[i][0];
+			mini = at[i][1];
+		}
+	}
+	return selfno;
+}
+lfu()
+{
+	int time = 0;
+	int i, k, j, pagefault = 0, d;
+	for (i = 0, k = 0; k < nf && i < lrs - 1; i++)
+	{
+		j = search_page_lru(rs[i]);
+		if (j == -1)
+		{
+			f[k].value = rs[i];
+			f[k].freq = 1;
+			f[k].cnt = time;
+			pagefault++;
+			k++;
+		}
+		else
+		{
+			f[j].freq++;
+		}
+		for (d = 0; d < nf; d++)
+			printf("%d (%d)\t", f[d].value, f[d].freq);
+		printf("\n");
+		time++;
+	}
+	while (i < lrs - 1)
+	{
+		j = search_page_lru(rs[i]);
+		if (j == -1)
+		{
+			k = getLFU();
+			f[k].value = rs[i];
+			f[k].freq = 1;
+			f[k].cnt = time;
+			pagefault++;
+			i++;
+		}
+		else
+		{
+			f[j].freq++;
+			i++;
+		}
+		for (d = 0; d < nf; d++)
+			printf("%d (%d)\t", f[d].value, f[d].freq);
+		printf("\n");
+		time++;
+	}
+	printf("\nTotal no of page fault %d\n", pagefault);
 }
 void main()
 {
-        int p_request[] = {5, 8, 10, 14, 10, 9, 5, 10, 8, 5, 1, 10, 9, 12, 10};
-        int size = 15;
-        int page_falts = 0, i, j, fno;
-        clrscr();
-        printf("\nHow many frames:");
-        scanf("%d", &n);
-        // initialize frames
-        for (i = 0; i < n; i++)
-        {
-                frames[i].pno = -1;
-                frames[i].freq = 0;
-        }
-        printf("\nPageNo Page Frames Page Fault");
-        printf("\n---------------------------------------------------");
-        for (i = 0; i < size; i++)
-        {
-                j = page_found(p_request[i]);
-                if (j == -1) // page fault occurs
-                {
-                        j = get_free_frame();
-                        if (j == -1) // no free frame - do page replacement
-                                j = get_mfu_frame();
-                        page_falts++;
-                        frames[j].pno = p_request[i];
-                        frames[j].freq = 1;
-                        printf("\n%4d\t ", p_request[i]);
-                        for (fno = 0; fno < n; fno++)
-                                printf("%4d:%2d", frames[fno].pno, frames[fno].freq);
-                        printf(" : YES");
-                }
-                else // page found in frame j
-                {
-                        printf("\n%4d\t ", p_request[i]);
-                        frames[j].freq++;
-                        for (fno = 0; fno < n; fno++)
-                                printf("%4d:%2d", frames[fno].pno, frames[fno].freq);
-                        printf(" : NO");
-                }
-        }
-        printf("\n-------------------------------------------------------");
-        printf("\n Number of Page_Falts=%d", page_falts);
-        getch();
+	accept();
+	display();
+	lfu();
 }
+

@@ -1,47 +1,61 @@
 #include <stdio.h>
-int main()
+#include <stdlib.h>
+int frame[20], rs[20];
+int nf, lrs = 0, i, j, k = 0, rs1 = 0;
+int pagefault = 0;
+void accept()
 {
-        int incomingStream[] = {4, 1, 2, 4, 5};
-        int pageFaults = 0;
-        int frames = 3;
-        int m, n, s, pages;
-        pages = sizeof(incomingStream) / sizeof(incomingStream[0]);
-        printf(" Incoming \ t Frame 1 \ t Frame 2 \ t Frame 3 ");
-        int temp[frames];
-        for (m = 0; m < frames; m++)
-        {
-                temp[m] = -1;
-        }
-        for (m = 0; m < pages; m++)
-        {
-                s = 0;
-                for (n = 0; n < frames; n++)
-                {
-                        if (incomingStream[m] == temp[n])
-                        {
-                                s++;
-                                pageFaults--;
-                        }
-                }
-                pageFaults++;
-                if ((pageFaults <= frames) && (s == 0))
-                {
-                        temp[m] = incomingStream[m];
-                }
-                else if (s == 0)
-                {
-                        temp[(pageFaults - 1) % frames] = incomingStream[m];
-                }
-                printf("\n");
-                printf("%d\t\t\t", incomingStream[m]);
-                for (n = 0; n < frames; n++)
-                {
-                        if (temp[n] != -1)
-                                printf(" %d\t\t\t", temp[n]);
-                        else
-                                printf(" - \t\t\t");
-                }
-        }
-        printf("\nTotal Page Faults:\t%d\n", pageFaults);
-        return 0;
+	printf("\nEnter total number of frames : ");
+	scanf("%d", &nf);
+	printf("\nEnter reference string : ");
+	while (rs1 != -1)
+	{
+		scanf("%d", &rs1);
+		rs[lrs++] = rs1;
+	}
 }
+void display()
+{
+	printf("\nTotal Number of Frames : %d", nf);
+	printf("\nReferences String :");
+	for (i = 0; i < lrs; i++)
+		printf("%d\t", rs[i]);
+	printf("\nLenght of Reference String : %d", lrs);
+}
+void fifo()
+{
+	int i;
+	for (i = 0; i < lrs - 1; i++)
+	{
+		j = searchpage(rs[i]);
+		if (j == -1)
+		{
+			frame[k] = rs[i];
+			pagefault++;
+		}
+		displayfifo(frame);
+		k = (k + 1) % nf;
+	}
+	printf("\nTotal no of page fault: %d\n", pagefault);
+}
+displayfifo(int frame[])
+{
+	printf("\n");
+	for (i = 0; i < nf; i++)
+		printf("%d\t", frame[i]);
+	printf("\n");
+}
+searchpage(int rs)
+{
+	for (i = 0; i < nf; i++)
+		if (rs == frame[i])
+			return 1;
+	return -1;
+}
+void main()
+{
+	accept();
+	display();
+	fifo();
+}
+
