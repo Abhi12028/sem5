@@ -38,9 +38,9 @@ void printinput()
 {
         int i;
 
-        printf("\n\n\nProcess\tAT\tBT");
+        printf("\n\n\nProcess\tBT\tAT");
         for (i = 0; i < n; i++)
-                printf("\n%s\t%d\t%d", tab[i].pname, tab[i].at, tab[i].tbt);
+                printf("\n%s\t%d\t%d", tab[i].pname, tab[i].tbt, tab[i].at);
        // getch();
 }
 
@@ -66,7 +66,7 @@ void printoutput()
         printf("\n\nProcess\tAT\tBT\tCT\tTAT\tWT");
         for (i = 0; i < n; i++)
         {
-                printf("\n\n%s\t%d\t%d\t%d\t%d\t%d", 			       tab[i].pname,
+                printf("\n\n%s\t%d\t%d\t%d\t%d\t%d", tab[i].pname,
                        tab[i].at,
                        tab[i].bt,
                        tab[i].ct,
@@ -77,8 +77,8 @@ void printoutput()
         }
         AvgTAT /= n;
         AvgWT /= n;
-        printf("\n\nAverage TAT = %.3f", AvgTAT);
-        printf("\n\nAverage WT = %.3f", AvgWT);
+        printf("\n\nAverage TAT = %f", AvgTAT);
+        printf("\n\nAverage WT = %f", AvgWT);
         //getch();
 }
 

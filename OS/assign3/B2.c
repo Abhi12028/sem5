@@ -117,9 +117,6 @@ void processinput()
 				time++;
 				tab[i].tbt--;
 				printinput();
-				seq[k].start = prev;
-				seq[k].end = time;
-				strcpy(seq[k++].pname, tab[i].pname);
 				prev = time;
 				tab[i].ct = time;
 				if (tab[i].tbt == 0)
@@ -132,30 +129,10 @@ void processinput()
 		else
 		{
 			time++;
-			seq[k].start = prev;
-			seq[k].end = time;
-			strcpy(seq[k++].pname, "*");
 			prev = time;
 		}
 	}
 }
-
-void ganttchart()
-{
-	int i, j = 1;
-	seq1[0] = seq[0];
-	for (i = 1; i < k; i++)
-	{
-		if (strcmp(seq1[j - 1].pname, seq[i].pname) == 0)
-			seq1[j - 1].end = seq[i].end;
-		else
-			seq1[j++] = seq[i];
-	}
-	for (i = 0; i < j; i++)
-		printf("\n%d\t%s\t%d", seq1[i].start, seq1[i].pname, seq1[i].end);
-	//getch();
-}
-
 void main()
 {
 	int i;
@@ -169,6 +146,6 @@ void main()
 
 	printoutput();
 
-	ganttchart();
+	//ganttchart();
 }
 
