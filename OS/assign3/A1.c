@@ -66,7 +66,7 @@ void printoutput()
         printf("\n\nProcess\tAT\tBT\tCT\tTAT\tWT");
         for (i = 0; i < n; i++)
         {
-                printf("\n\n%s\t%d\t%d\t%d\t%d\t%d", 			       tab[i].pname,
+                printf("\n\n%s\t%d\t%d\t%d\t%d\t%d",tab[i].pname,
                        tab[i].at,
                        tab[i].bt,
                        tab[i].ct,

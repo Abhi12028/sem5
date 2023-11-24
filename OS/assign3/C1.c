@@ -58,7 +58,17 @@ void bubble()
                 tab[j+1] = t;
             }
 }
-
+int getmin(int t)
+{
+    int i,mini,min=99;
+    for(i=0;i<n;i++)
+        if(tab[i].at<=t && tab[i].tbt!=0 && tab[i].p<min)
+        {
+            min = tab[i].p;
+            mini = i;
+        }
+    return mini;
+}
 
 
 void printoutput()
@@ -92,17 +102,6 @@ int arrived(int t)
             return 1;
     return 0;
 }
-int getmin(int t)
-{
-    int i,mini,min=99;
-    for(i=0;i<n;i++)
-        if(tab[i].at<=t && tab[i].tbt!=0 && tab[i].p<min)
-        {
-            min = tab[i].p;
-            mini = i;
-        }
-    return mini;
-}
 
 void processinput()
 {
@@ -113,8 +112,6 @@ void processinput()
         if(arrived(time))
         {
                   i=getmin(time);
-                for(j=0;j<tab[i].bt;j++)
-                 {
                     time++;
                     tab[i].tbt--;
                     printinput();
@@ -126,10 +123,9 @@ void processinput()
                     if(tab[i].tbt==0)
                     {
                         finish++;
-                        break;
+
                      }
 
-                 }
         }
         else
         {
@@ -174,5 +170,5 @@ void main()
 
     ganttchart();
 
+    
 }
-

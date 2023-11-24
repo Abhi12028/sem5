@@ -4,7 +4,7 @@
 struct Input
 {
     char pname[10];
-    int  bt,at,ct,tbt,p;
+    int  bt,at,ct,tbt;
 }tab[5];
 
 struct Sequence
@@ -20,6 +20,8 @@ void getinput()
     int i;
     printf("\nEnter No.of Processes:");
     scanf("%d",&n);
+    printf("Enter Time Quantum: ");
+    scanf("%d",&q);
 
     for(i=0;i<n;i++)
     {
@@ -29,9 +31,6 @@ void getinput()
         scanf("%d",&tab[i].bt);
         printf("Arrival time:");
         scanf("%d",&tab[i].at);
-        printf("Enter priority: ");
-        scanf("%d",&tab[i].p);
-
         tab[i].tbt = tab[i].bt;
     }
 }
@@ -39,9 +38,9 @@ void printinput()
 {
     int i;
 
-    printf("\nProcess\tBT\tAT\tpriority");
+    printf("\n\n\nProcess\tBT\tAT");
     for(i=0;i<n;i++)
-        printf("\n%s\t%d\t%d\t%d",tab[i].pname,tab[i].tbt,tab[i].at,tab[i].p);
+        printf("\n%s\t%d\t%d",tab[i].pname,tab[i].tbt,tab[i].at);
     getch();
 }
 
@@ -59,16 +58,15 @@ void bubble()
             }
 }
 
-
-
 void printoutput()
 {
     int i;
     float AvgTAT=0,AvgWT=0;
-    printf("\nProcess\tAT\tBT\tCT\tTAT\tWT");
+    printf("\n      *******Final  Table*********");
+    printf("\n\nProcess\tAT\tBT\tCT\tTAT\tWT");
     for(i=0;i<n;i++)
     {
-        printf("\n%s\t%d\t%d\t%d\t%d\t%d",tab[i].pname,
+        printf("\n\n%s\t%d\t%d\t%d\t%d\t%d",tab[i].pname,
                               tab[i].at,
                               tab[i].bt,
                               tab[i].ct,
@@ -79,8 +77,8 @@ void printoutput()
     }
     AvgTAT/=n;
     AvgWT/=n;
-    printf("\nAverage TAT = %f",AvgTAT);
-    printf("\nAverage WT = %f",AvgWT);
+    printf("\n\nAverage TAT = %f",AvgTAT);
+    printf("\n\nAverage WT = %f",AvgWT);
     getch();
 }
 
@@ -92,29 +90,20 @@ int arrived(int t)
             return 1;
     return 0;
 }
-int getmin(int t)
-{
-    int i,mini,min=99;
-    for(i=0;i<n;i++)
-        if(tab[i].at<=t && tab[i].tbt!=0 && tab[i].p<min)
-        {
-            min = tab[i].p;
-            mini = i;
-        }
-    return mini;
-}
 
 void processinput()
 {
     int i=0,j;
     finish = k = 0;
+    time=tab[0].at;
     while(finish!=n)
     {
         if(arrived(time))
         {
-                  i=getmin(time);
-                for(j=0;j<tab[i].bt;j++)
-                 {
+            if(tab[i].tbt!=0)
+            {
+                for(j=0;j<q;j++)
+                {
                     time++;
                     tab[i].tbt--;
                     printinput();
@@ -127,9 +116,9 @@ void processinput()
                     {
                         finish++;
                         break;
-                     }
-
-                 }
+                    }
+                }
+            }
         }
         else
         {
@@ -139,6 +128,12 @@ void processinput()
             strcpy(seq[k++].pname,"*");
             prev = time;
         }
+        if(time < tab[(i+1)%n].at)
+        {
+            i=0;
+        }
+        else
+            i = (i+1)%n;
 
     }
 }
@@ -147,6 +142,7 @@ void ganttchart()
 {
     int i,j=1;
     seq1[0] = seq[0];
+    printf("\n   ******Gantt Chart*******");
     for(i=1;i<k;i++)
     {
         if(strcmp(seq1[j-1].pname,seq[i].pname)==0)
@@ -155,7 +151,7 @@ void ganttchart()
             seq1[j++] = seq[i];
     }
     for(i=0;i<j;i++)
-        printf("\n%d\t%s\t%d",seq1[i].start,seq1[i].pname,seq1[i].end);
+        printf("\n\n%d\t%s\t%d",seq1[i].start,seq1[i].pname,seq1[i].end);
     getch();
 }
 
@@ -166,13 +162,10 @@ void main()
     printf("\nEntered data-: ");
     printinput();
     bubble();
-    printf("\nData after sorting according to arrival time-: ");
+    printf("\n\nData after sorting according to arrival time-: ");
     printinput();
     processinput();
-
     printoutput();
-
     ganttchart();
-
 }
 

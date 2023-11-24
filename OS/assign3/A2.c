@@ -1,34 +1,168 @@
 #include<stdio.h>
+#include<string.h>
 
-int main() {
-  int time, burst_time[10], at[10], sum_burst_time = 0, smallest, n, i;
-  int sumt = 0, sumw = 0;
-  printf("enter the no of processes : ");
-  scanf("%d", &n);
-  for (i = 0; i < n; i++) {
-    printf("the arrival time for process P%d : ", i + 1);
-    scanf("%d", &at[i]);
-    printf("the burst time for process P%d : ", i + 1);
-    scanf("%d", &burst_time[i]);
-    sum_burst_time += burst_time[i];
-  }
-  burst_time[9] = 9999;
-  for (time = 0; time < sum_burst_time;) {
-    smallest = 9; //dont know why
-    for (i = 0; i < n; i++) {
-      if (at[i] <= time && burst_time[i] > 0 && burst_time[i] < burst_time[smallest])
-        smallest = i; //here we get small value of arrival time that is less than timer
+struct Input
+{
+    char pname[10];
+    int  bt,at,ct,tbt;
+}tab[5];
+
+struct Sequence
+{
+    int start,end;
+    char pname[10];
+}seq[100],seq1[20];
+
+int finish,time,n,k,prev;
+
+void getinput()
+{
+    int i;
+    printf("\nEnter No.of Processes:");
+    scanf("%d",&n);
+    for(i=0;i<n;i++)
+    {
+        printf("Process name:");
+        scanf("%s",tab[i].pname);
+        printf("Burst time:");
+        scanf("%d",&tab[i].bt);
+        printf("Arrival time:");
+        scanf("%d",&tab[i].at);
+        tab[i].tbt = tab[i].bt;
     }
-    
-    
-    printf("P[%d]\t|\t%d\t|\t%d\n", smallest + 1, time + burst_time[smallest], time - at[smallest]);
-    sumt += time + burst_time[smallest] - at[smallest];
-    sumw += time - at[smallest];
-    time = time + burst_time[smallest];
-    burst_time[smallest] = 0;
-  }
-  printf("\n\n average waiting time = %f", sumw * 1.0 / n);
-  printf("\n\n average turnaround time = %f", sumt * 1.0 / n);
-  return 0;
+}
+
+void printinput()
+{
+    int i;
+
+    printf("\n\n\nProcess\tBT\tAT");
+    for(i=0;i<n;i++)
+        printf("\n%s\t%d\t%d",tab[i].pname,tab[i].tbt,tab[i].at);
+    //getch();
+}
+
+void bubble()
+{
+    struct Input t;
+    int i,j;
+    for(i=0;i<n;i++)
+        for(j=0;j< (n-1)-i;j++)
+            if(tab[j].at>tab[j+1].at)
+            {
+                t = tab[j];
+                tab[j] = tab[j+1];
+                tab[j+1] = t;
+            }
+}
+
+int arrived(int t){
+	int i;
+	for (i=0;i<n;i++)
+		if(tab[i].at<=t && tab[i].tbt !=0)
+			return 1;
+	return 0;
+		
+}
+
+int getmin(int t){
+	int i,position,min=100;
+	for(i=0;i<n;i++){
+		if(tab[i].at<=t && tab[i].tbt!=0 && tab[i].tbt < min){
+			min=tab[i].tbt;
+			position=i;
+		}
+	}
+	return position;
+}
+
+void processinput(){
+	int finish =k =0;
+	int i ,j;
+	while(finish !=n){
+		if(arrived(time)){
+			
+			i = getmin(time);
+			for(j=0;j<tab[i].bt;j++){
+				time++;
+				tab[i].tbt--;
+				printinput();//for debuggung purpose
+				tab[i].ct=time;
+				seq[k].start=prev;
+				seq[k].end=time;
+				strcpy(seq[k].pname,tab[i].pname);
+				k++;
+				prev=time;
+				if(tab[i].tbt==0){
+					finish++;
+					break;
+				}
+			}	
+		}
+		else{
+			time++;
+			seq[k].start=prev;
+			seq[k].end=time;
+			strcpy(seq[k].pname,"**");
+			k++;
+			prev=time;
+		}
+	}
+}
+
+void printoutput(){
+	float avgtat=0,avgwt=0;
+	
+	printf("\n\nProcess\tAT\tBT\tCT\tTAT\tWT\n");
+	for(int i=0;i<n;i++){
+		printf("%s\t%d\t%d\t%d\t%d\t%d\t\n",
+			tab[i].pname,
+			tab[i].at,
+			tab[i].bt,
+			tab[i].ct,
+			tab[i].ct-tab[i].at,
+			tab[i].ct-tab[i].at-tab[i].bt);
+		
+		avgtat += tab[i].ct-tab[i].at;
+		avgwt +=  tab[i].ct-tab[i].at-tab[i].bt;	
+	}
+	printf("Average TurnARoundTime::%.3f",avgtat/=n);
+	printf("Average WatingTime::%.3f",avgwt/=n);	
+	
+}
+
+void ganntchart(){
+	int i,j=1;
+	seq1[0]=seq[0];
+	printf("\n******************************GANNT CHART******************************\n");
+	for(i=1;i<k;i++){
+		if(strcmp(seq1[j-1].pname,seq[i].pname)==0){
+			seq[j-1].end=seq[i].end;
+		}
+		else{
+			seq1[j++]=seq[i];
+		}
+	}
+	for(i=0;i<j;i++)
+        	printf("\n\n%d\t%s\t%d",
+        		seq1[i].start,
+        		seq1[i].pname,
+        		seq1[i].end);
+}
+
+int main(){
+	getinput();
+	printinput();
+	bubble();
+	printf("\nInput after Sorting\n*************************************\n");
+	printinput();
+	
+	processinput();
+	printoutput();
+	
+	ganntchart();
+	
+
+
 }
 
