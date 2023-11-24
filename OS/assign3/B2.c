@@ -42,7 +42,7 @@ void printinput()
     printf("\nProcess\tBT\tAT\tpriority");
     for(i=0;i<n;i++)
         printf("\n%s\t%d\t%d\t%d",tab[i].pname,tab[i].tbt,tab[i].at,tab[i].p);
-    getch();
+    //getch();
 }
 
 void bubble()
@@ -81,7 +81,7 @@ void printoutput()
     AvgWT/=n;
     printf("\nAverage TAT = %f",AvgTAT);
     printf("\nAverage WT = %f",AvgWT);
-    getch();
+    //getch();
 }
 
 int arrived(int t)
@@ -156,7 +156,7 @@ void ganttchart()
     }
     for(i=0;i<j;i++)
         printf("\n%d\t%s\t%d",seq1[i].start,seq1[i].pname,seq1[i].end);
-    getch();
+    //getch();
 }
 
 void main()
