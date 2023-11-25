@@ -5,7 +5,7 @@ struct Input
 {
     char pname[10];
     int  bt,at,ct,tbt;
-}tab[5];
+}tab[20];
 
 struct Sequence
 {
@@ -41,7 +41,7 @@ void printinput()
     printf("\n\n\nProcess\tBT\tAT");
     for(i=0;i<n;i++)
         printf("\n%s\t%d\t%d",tab[i].pname,tab[i].tbt,tab[i].at);
-    //getch();
+    getchar();
 }
 
 void bubble()
@@ -50,7 +50,7 @@ void bubble()
     int i,j;
     for(i=0;i<n;i++)
         for(j=0;j< (n-1)-i;j++)
-            if(tab[j].at>tab[j+1].at)
+            if(tab[j].at > tab[j+1].at)
             {
                 t = tab[j];
                 tab[j] = tab[j+1];
@@ -79,14 +79,14 @@ void printoutput()
     AvgWT/=n;
     printf("\n\nAverage TAT = %f",AvgTAT);
     printf("\n\nAverage WT = %f",AvgWT);
-    //getch();
+    getchar();
 }
 
 int arrived(int t)
 {
     int i;
     for(i=0;i<n;i++)
-        if(tab[i].at<=t && tab[i].tbt!=0)
+        if(tab[i].at <= t && tab[i].tbt!=0)
             return 1;
     return 0;
 }
@@ -128,6 +128,7 @@ void processinput()
             strcpy(seq[k++].pname,"*");
             prev = time;
         }
+        printf("Checking %d\n",tab[(i+1)%n].at);
         if(time < tab[(i+1)%n].at)
         {
             i=0;
@@ -152,7 +153,7 @@ void ganttchart()
     }
     for(i=0;i<j;i++)
         printf("\n\n%d\t%s\t%d",seq1[i].start,seq1[i].pname,seq1[i].end);
-   // getch();
+    getchar();
 }
 
 void main()
