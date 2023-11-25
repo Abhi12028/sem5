@@ -1,88 +1,36 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-#define max 1024
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-void lineread(char *fname, char *token ){
-	FILE *fp;
-	char buffer[max] ,len[max] ,newstring[max]="\0";
-	int length ,i=0;
-	if((fp=fopen(fname,"r"))==NULL){
-		printf("Error in reading file");
-		return;
-	}
-	char count = token[0];
-	//printf("count = %c",count);
-	switch(count){
-		case 'f':			
-			/*while((ch=fgetc(fpoint))!= EOF){
-				char_count++;
-				if(ch == ' '|| ch=='\n' || ch=='\t'){
-					if(in_word){
-						word_count++;
-						in_word=0;
-					}
-					if(ch=='\n' || ch=='\t')
-						line_count++;
-				}
-				else{
-					in_word =1;
-				}
-			}*/
-		case 'a':
-			printf("Word to search:");
-			fgets(len , sizeof(len),stdin);
-			if (len[strlen(len) - 1] == '\n') {  
-				len[strlen(len) - 1] = '\0';
-        		}
-			
-			strcat(newstring , "grep ");
-			strcat(newstring , len);
-			printf("%s\n",newstring);
-			strcat(newstring," ");
-			strcat(newstring,fname);
-			system(newstring);
-			fclose(fp);
-			break; 
-			
-		case 'c':
-			printf("Word to search:");
-			fgets(len , sizeof(len),stdin);
-			if (len[strlen(len) - 1] == '\n') {  
-				len[strlen(len) - 1] = '\0';
-        		}
-			strcat(newstring , "grep -c ");
-			strcat(newstring , len);
-			printf("%s\n",newstring);
-			strcat(newstring," ");
-			strcat(newstring,fname);
-			system(newstring);
-			fclose(fp);
-			break; 
-			
-	}
+void search(char t2, char *t3, char *t4) {
+  char newstring[80];
+  switch (t2) {
+  case 'f':
+    snprintf(newstring, sizeof(newstring), "grep -m 1 %s %s", t4, t3);
+    system(newstring);
+    break;
+  case 'a':
+    snprintf(newstring, sizeof(newstring), "grep %s %s", t4, t3);
+    system(newstring);
+    break;
+  case 'c':
+    snprintf(newstring, sizeof(newstring), "grep -c %s %s", t4, t3);
+    system(newstring);
+    break;
+  }
 }
 
-int main(){
-	char cmd[max],*token=NULL, *fname ,*temp ,nullString[max] ="\0";
-	int i=0 ,j=0,count=0; 
-	while(cmd){
-		printf("\nmyshell$: ");
-		fgets(cmd, sizeof(cmd), stdin);
-		if (cmd[strlen(cmd) - 1] == '\n') {  // Remove the newline character from the input.
-            		cmd[strlen(cmd) - 1] = '\0';
-        	}
-		strtok(cmd," ");
-		token = strtok(NULL," ");
-		fname = strtok(NULL," ");
-		//printf("token = %s \n fname = %s\n",token,fname);
-		
-		if(token !=NULL)
-			lineread(fname,token);
-			
-		i++;//returning condition
-		
-        	
-	}
-	return 0;
+int main() {
+  char cmd[80], t1[10], t2[10], t3[10], t4[10];
+  int n;
+
+  while (1) {
+    printf("\nmyshell$: ");
+    fgets(cmd, sizeof(cmd), stdin);
+    n = sscanf(cmd, "%s%s%s%s", t1, t2, t3, t4);
+    if (n == 4) {
+      if (strcmp(t1, "search") == 0)
+        search(t2[0], t3, t4);
+    }
+  }
 }
