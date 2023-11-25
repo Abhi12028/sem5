@@ -1,71 +1,121 @@
 #include <stdio.h>
-#include <stdbool.h>
-// function to identify if the page is present in the frame or not
-bool isPageInFrame(int key, int frame[], int numOfFrames)
+#include <stdlib.h>
+struct frame
 {
-	for (int i = 0; i < numOfFrames; i++)
+	int value, cnt, freq;
+} f[20];
+int frame[20], rs[20], cf = 0, at[10][10];
+int nf, lrs;
+void accept()
+{
+	int rs1 = 0;
+	printf("\nEnter total number of frames : ");
+	scanf("%d", &nf);
+	printf("\nEnter reference string : ");
+	while (rs1 != -1)
 	{
-		if (frame[i] == key)
-			return true;
+		scanf("%d", &rs1);
+		rs[lrs++] = rs1;
 	}
-	return false;
 }
-// function that will identify the frame which has its demand very late in the future
-int predictPageToReplace(int pages[], int numPages, int frame[], int numOfFrames, int index)
+void display()
 {
-	printf("Index = %d", index);
-	int result = -1, farthest = index;
-	for (int i = 0; i < numOfFrames; i++)
-	{
-		int j;
-		for (j = index; j < numPages; j++)
-		{
-			if (frame[i] == pages[j])
-			{
-				if (j > farthest)
-				{
-					farthest = j;
-					result = i;
-				}
-				break;
-			}
-		}
-		if (j == numPages)
+	int i;
+	printf("\nTotal Number of Frames : %d", nf);
+	printf("\nReferences String :");
+	for (i = 0; i < lrs - 1; i++)
+		printf("%d\t", rs[i]);
+	printf("\nLenght of Reference String : %d\n", lrs - 1);
+}
+int search_page_lru(int rs)
+{
+	int i = 0;
+	for (i = 0; i < nf; i++)
+		if (rs == f[i].value)
 			return i;
-	}
-	return (result == -1) ? 0 : result;
+	return -1;
 }
-void optimalPageReplacement(int pages[], int numPages, int numOfFrames)
+int getLFU()
 {
-	// an array for all the frames
-	int frame[numOfFrames];
-	int hit = 0;
-	int index = 0;
-	// Check for page fault or page hit
-	for (int i = 0; i < numPages; i++)
-	{
-		if (isPageInFrame(pages[i], frame, numOfFrames))
+	int fno, i = 0;
+	int selfno = 0, tcnt = 0, mini = 100;
+	for (fno = 1; fno < nf; fno++)
+	{	
+		if (f[fno].freq <= f[selfno].freq)
 		{
-			hit++;
-			continue;
+			selfno = fno;
+			at[tcnt][0] = fno;
+			at[tcnt][1] = f[fno].cnt;
+			tcnt++;
 		}
-		if (index < numOfFrames)
-			frame[index++] = pages[i];
+	}
+	for (i = 0; i < tcnt; i++)
+	{
+		//		printf("\narrival \n\n");
+		//		printf("%d",at[i][1]);
+		if (at[i][1] < mini)
+		{
+			selfno = at[i][0];
+			mini = at[i][1];
+		}
+	}
+	return selfno;
+}
+void lfu()
+{
+	int time = 0;
+	int i, k, j, pagefault = 0, d;
+	for (i = 0, k = 0; k < nf && i < lrs - 1; i++)
+	{
+		j = search_page_lru(rs[i]);
+		if (j == -1)//page is not present in frame
+		{
+			f[k].value = rs[i];
+			f[k].freq = 1;
+			f[k].cnt = time;
+			pagefault++;
+			k++;
+		}
 		else
 		{
-			int j = predictPageToReplace(pages, numPages, frame, numOfFrames, i + 1);
-			frame[j] = pages[i];
+			f[j].freq++;
 		}
+		for (d = 0; d < nf; d++)
+			printf("%d (%d)\t", f[d].value, f[d].freq);
+		printf("\n");
+		time++;
 	}
-	printf("The total number of page hit is %d\n", hit);
-	printf("The total number of page fault is %d\n", (numPages - hit));
+	while (i < lrs - 1)
+	{
+		j = search_page_lru(rs[i]);
+		if (j == -1)
+		{
+			k = getLFU();
+			f[k].value = rs[i];
+			f[k].freq = 1;
+			f[k].cnt = time;
+			pagefault++;
+			i++;
+		}
+		else
+		{
+			f[j].freq++;
+			i++;
+		}
+		for (d = 0; d < nf; d++)
+			printf("%d (%d)\t", f[d].value, f[d].freq);
+		printf("\n");
+		time++;
+	}
+	printf("\nTotal no of page fault %d\n", pagefault);
 }
-// main function
-int main()
+void main()
 {
-	int pages[] = {1, 3, 2, 4, 2, 3, 1, 4, 2, 4, 1, 3};
-	int numPages = sizeof(pages) / sizeof(pages[0]);
-	int numOfFrames = 3;
-	optimalPageReplacement(pages, numPages, numOfFrames);
-	return 0;
+	accept();
+	display();
+	lfu();
 }
+
+
+
+

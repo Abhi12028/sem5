@@ -41,7 +41,7 @@ void printinput()
         printf("\n\n\nProcess\tAT\tBT");
         for (i = 0; i < n; i++)
                 printf("\n%s\t%d\t%d", tab[i].pname, tab[i].at, tab[i].tbt);
-       // getch();
+       getchar();
 }
 
 void bubble()
@@ -79,7 +79,7 @@ void printoutput()
         AvgWT /= n;
         printf("\n\nAverage TAT = %.3f", AvgTAT);
         printf("\n\nAverage WT = %.3f", AvgWT);
-        //getch();
+       	getchar();
 }
 
 int arrived(int t)
@@ -140,11 +140,7 @@ void ganttchart()
 {
         int i, j = 1;
         seq1[0] = seq[0];
-        /*printf("\n          ******Gantt Chart*******");
-        for (i = 0; i < k; i++)
-                printf("\n\n%d\t%s\t%d", seq[i].start, seq[i].pname, seq[i].end);
-        printf("\n");*/
-         printf("\n          ******Gantt Chart*******");
+        printf("\n          ******Gantt Chart*******");
         for (i = 1; i < k; i++)
         {
                 if (strcmp(seq1[j - 1].pname, seq[i].pname) == 0)

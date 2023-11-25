@@ -6,12 +6,13 @@ int pagefault = 0;
 void accept()
 {
 	printf("\nEnter total number of frames : ");
-	scanf("%d", &nf);
-	printf("\nEnter reference string : ");
-	while (rs1 != -1)
-	{
+	scanf("%d", &nf); //nf =NUmber of Frame
+	printf("\nEnter reference string (And enter -1 for end ): ");
+	while(rs1 != -1)//here enter -1 for breaaking the loop
+	{	
 		scanf("%d", &rs1);
-		rs[lrs++] = rs1;
+		if(rs1 != -1)
+			rs[lrs++] = rs1; //lrs=lenght of reference string
 	}
 }
 void display()
@@ -22,10 +23,26 @@ void display()
 		printf("%d\t", rs[i]);
 	printf("\nLenght of Reference String : %d", lrs);
 }
+
+void displayfifo(int frame[])
+{
+	printf("\n");
+	for (i = 0; i < nf; i++)
+		printf("%d\t", frame[i]);
+	printf("\n");
+}
+int searchpage(int rs)
+{
+	for (i = 0; i < nf; i++)
+		if (rs == frame[i])
+			return 1;
+	return -1;
+}
+
 void fifo()
 {
 	int i;
-	for (i = 0; i < lrs - 1; i++)
+	for (i = 0; i < lrs; i++)
 	{
 		j = searchpage(rs[i]);
 		if (j == -1)
@@ -38,20 +55,7 @@ void fifo()
 	}
 	printf("\nTotal no of page fault: %d\n", pagefault);
 }
-displayfifo(int frame[])
-{
-	printf("\n");
-	for (i = 0; i < nf; i++)
-		printf("%d\t", frame[i]);
-	printf("\n");
-}
-searchpage(int rs)
-{
-	for (i = 0; i < nf; i++)
-		if (rs == frame[i])
-			return 1;
-	return -1;
-}
+
 void main()
 {
 	accept();

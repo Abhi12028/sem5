@@ -1,3 +1,5 @@
+
+
 #include <stdio.h>
 #include <stdlib.h>
 struct frame
@@ -27,7 +29,7 @@ void display()
 		printf("%d\t", rs[i]);
 	printf("\nLenght of Reference String : %d\n", lrs - 1);
 }
-search_page_lru(int rs)
+int search_page(int rs)
 {
 	int i = 0;
 	for (i = 0; i < nf; i++)
@@ -65,13 +67,13 @@ int getLFU()
 	}
 	return selfno;
 }
-lfu()
+void lfu()
 {
 	int time = 0;
 	int i, k, j, pagefault = 0, d;
 	for (i = 0, k = 0; k < nf && i < lrs - 1; i++)
 	{
-		j = search_page_lru(rs[i]);
+		j = search_page(rs[i]);
 		if (j == -1)
 		{
 			f[k].value = rs[i];
@@ -91,7 +93,7 @@ lfu()
 	}
 	while (i < lrs - 1)
 	{
-		j = search_page_lru(rs[i]);
+		j = search_page(rs[i]);
 		if (j == -1)
 		{
 			k = getLFU();

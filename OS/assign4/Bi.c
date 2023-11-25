@@ -33,7 +33,7 @@ int predictPageToReplace(int pages[], int numPages, int frame[], int numOfFrames
 		if (j == numPages)
 			return i;
 	}
-	return (result == -1) ? 0 : result;
+	return (result == -1) ? 0 : result; //chat gpt what this line do
 }
 void optimalPageReplacement(int pages[], int numPages, int numOfFrames)
 {
@@ -69,3 +69,6 @@ int main()
 	optimalPageReplacement(pages, numPages, numOfFrames);
 	return 0;
 }
+
+
+

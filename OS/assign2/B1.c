@@ -47,7 +47,7 @@ int main(){
 		if(token == 'f' || token == 'n' || token == 'i'){
 			dirfunction(fname,token);
 		}
-		token ="0";// this is for making above condition false when no cmd set
+		
 		
 		if(cmd=="exit")
 			break;
