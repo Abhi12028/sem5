@@ -6,21 +6,21 @@ int main(){
 	int pid, ppid;
 	pid = fork();
 	ppid =getppid();
-	printf("Current ID:%d Parent ID:%d\n",pid,getppid());
+	printf("Current ID:%d Parent ID:%d\n",getpid(),getppid());
 	
-	if(pid== 0){
-		sleep(2);
-		printf("\n Child process is created \n Process ID child : %d\n",pid);
-		ppid=getppid();
-		if(ppid ==1){
-			printf("Parent process is terminated now and\n child process is orphan\n");
-		}
-		else{
-			printf("Parent is still excuting ppid is %d\n",ppid);
-		}
-	}
-	else{
-		printf("Parent is excuting first \n ID is :%d\n\n",getpid());
-	}
+	if(pid<0)
+		printf("fork failed\n");
+	
+	else if(pid==0){
+        //child process
+        	printf("\nI am child process : %d and my parent id : %d\n",getpid(),getppid());
+        //wait(NULL);
+        	sleep(1);
+       		printf("\nI am child process : %d and my parent id : %d\n",getpid(),getppid());
+    }
+    	else{
+        //parent process
+       		printf("\nI am Parent process : %d and my parent id : %d\n",getpid(),getppid());
+    	}
 	return 0;
 }

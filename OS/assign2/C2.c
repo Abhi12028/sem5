@@ -19,7 +19,7 @@ void search(char t2, char *t3, char *t4) {
     break;
   }
 }
-
+	
 int main() {
   char cmd[80], t1[10], t2[10], t3[10], t4[10];
   int n;

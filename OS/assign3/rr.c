@@ -89,7 +89,7 @@ int arrived(int time){
 }
 
 void processinput(){
-	int i,j,finish=0;
+	int i=0,j,finish=0;
 	int time=tab[0].at,prev=0;
 	while(finish !=lenght){
 		if(arrived(time)){

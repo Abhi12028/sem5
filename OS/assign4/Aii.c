@@ -73,7 +73,7 @@ void lru()
 			printf("%d\t",fr[d].value);
 		printf("\n");
 	}
-	printf("while loop\n");
+	//printf("while loop\n");
 	while(i<lrs-1)
 	{
 		j=search_page_lru(rs[i]);
