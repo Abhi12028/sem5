@@ -1,55 +1,37 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-#define max 1024
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-void dirfunction(char fname[], char token){
-		char newcmd[max];
-		switch(token){
-			case 'f':
-				char cmd[]="ls ";
-				printf("Printing file in directory:\n");
-				//printf("%s\n",strcat(cmd ,fname));
-				system("cd");
-				system(strcat(cmd,fname));
-				break;
-			case 'n':
-				printf("Printing numnber of file and subdirectory in directory:\n ");
-				system("ls -q | wc -l");
-				break;
-			case 'i':
-				printf("Printing inode of file in directory:\n");
-				system("ls -i");
-				break;
-			}
-	return;
+void search(char t2, char *t3) {
+  char newstring[80];
+  switch (t2) {
+  case 'f':
+    snprintf(newstring, sizeof(newstring), "ls %s", t3);
+    system(newstring);
+    break;
+  case 'n':
+    snprintf(newstring, sizeof(newstring), "ls -q %s| wc -l",t3);
+    system(newstring);
+    break;
+  case 'i':
+    snprintf(newstring, sizeof(newstring), "ls -i %s", t3);
+    system(newstring);
+    break;
+  }
 }
 
-int main(){
-	char cmd[max],token, fname[max];
-	int i=0 ,j=0,count=0; 
-	while(cmd){
-		printf("\nmyshell$: ");
-		fgets(cmd, sizeof(cmd), stdin); 
-		
-		// Remove the newline character from the input.
-		 if (cmd[strlen(cmd) - 1] == '\n') {
-            		cmd[strlen(cmd) - 1] = '\0';
-        	}
-		
-		token = cmd[5]; // this will give token name
-		for(i=7;i<strlen(cmd);i++){
-			fname[j]=cmd[i];//this will give filename
-			j++;
-		}
-		
-		printf("count=%d\n",count++);
-		if(token == 'f' || token == 'n' || token == 'i'){
-			dirfunction(fname,token);
-		}
-		
-		
-		if(cmd=="exit")
-			break;
-	}
-}	
+int main() {
+  char cmd[80], t1[10], t2[10], t3[10], t4[10];
+  int n;
+
+  while (1) {
+    printf("\nmyshell$: ");
+    fgets(cmd, sizeof(cmd), stdin);
+    n = sscanf(cmd, "%s%s%s", t1, t2, t3);
+    printf("%s",t3);
+    if (n == 3) {
+      if (strcmp(t1, "list") == 0)
+        search(t2[0], t3);
+    }
+  }
+}

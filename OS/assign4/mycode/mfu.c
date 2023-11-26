@@ -49,8 +49,8 @@ int getmfu(){
 	for(i=1;i<nf;i++){
 		if(frame[i].freq >= frame[val].freq){
 			val=i;
-			at[tcnt][0]=i;
-			at[tcnt][1]=frame[i].cnt;
+			//at[tcnt][0]=i;
+			//at[tcnt][1]=frame[i].cnt;
 			tcnt++;
 		}
 	} 

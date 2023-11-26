@@ -1,77 +1,36 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-#define max 1024
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-void fileread(char *fname, char token){
-	
-	int char_count=0, word_count=0, line_count=0,in_word=0;
-	char ch;
-	
-	
-	printf("%s",fname);
-	
-	FILE *fpoint = fopen(fname,"r");
-	if(fpoint==NULL){
-		printf("\nThere is error while reading file. Check file!!!\n");
-		return;
-	}
-	
-	while((ch=fgetc(fpoint))!= EOF){
-		char_count++;
-		if(ch == ' '|| ch=='\n' || ch=='\t'){
-			if(in_word){
-				word_count++;
-				in_word=0;
-			}
-			if(ch=='\n' || ch=='\t')
-				line_count++;
-		}
-		else{
-			in_word =1;
-		}
-	}
-	//printf("line word::%d\n word_count::%d\n",line_count,word_count);
-	switch(token){
-	case 'c':
-		printf("Character in give file :%d",char_count);
-		break;
-		
-	case 'w':
-		printf("Word in give file :%d",word_count);
-		break;
-		
-	case 'l':
-		printf("Line in give file :%d",line_count);
-		break;
-	}
-	fclose(fpoint);
-	return;
+void search(char t2, char *t3) {
+  char newstring[80];
+  switch (t2) {
+  case 'c':
+    snprintf(newstring, sizeof(newstring), "wc -c %s", t3);
+    system(newstring);
+    break;
+  case 'w':
+    snprintf(newstring, sizeof(newstring), "wc -w %s", t3);
+    system(newstring);
+    break;
+  case 'l':
+    snprintf(newstring, sizeof(newstring), "wc -l %s", t3);
+    system(newstring);
+    break;
+  }
 }
 
-int main(){
-	char cmd[max],token, fname[max];
-	int i=0 ,j=0;
-	while(cmd){
-		printf("\nmyshell$: ");
-		fgets(cmd, sizeof(cmd), stdin); 
-		
-		// Remove the newline character from the input.
-		 if (cmd[strlen(cmd) - 1] == '\n') {
-            		cmd[strlen(cmd) - 1] = '\0';
-        	}
-		
-		token = cmd[6]; // this will give token name
-		for(i=8;i<strlen(cmd);i++){
-			fname[j]=cmd[i];//this will give filename
-			j++;
-		}
-		
-		if(token == 'c' || token == 'w' || token == 'l'){
-			fileread(fname,token);
-		}
-		token ='a';// this is for making above condition false when no cmd set
-		if(cmd=="exit")
-			break;
-	}
+int main() {
+  char cmd[80], t1[10], t2[10], t3[10], t4[10];
+  int n;
+
+  while (1) {
+    printf("\nmyshell$: ");
+    fgets(cmd, sizeof(cmd), stdin);
+    n = sscanf(cmd, "%s%s%s", t1, t2, t3);
+    if (n == 3) {
+      if (strcmp(t1, "count") == 0)
+        search(t2[0], t3);
+    }
+  }
 }
