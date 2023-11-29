@@ -24,6 +24,13 @@ int main() {
   char cmd[80], t1[10], t2[10], t3[10], t4[10];
   int n;
 
+<<<<<<< HEAD
+=======
+int main() {
+  char cmd[80], t1[10], t2[10], t3[10], t4[10];
+  int n;
+
+>>>>>>> refs/remotes/origin/main
   while (1) {
     printf("\nmyshell$: ");
     fgets(cmd, sizeof(cmd), stdin);
